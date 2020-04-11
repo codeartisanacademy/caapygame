@@ -21,6 +21,8 @@ sprites_list.add(ball)
 
 clock = pygame.time.Clock()
 
+score = 0
+
 carry_on = True
 
 while carry_on:
@@ -44,17 +46,29 @@ while carry_on:
     if ball.rect.x <= 0:
         ball.velocity[0] = -ball.velocity[0]
     
-    # if ball touch bottom wall
+    # if ball touch bottom wall, decrease scode
     if ball.rect.y > 490:
+        if score != 0:
+            score -= 1
         ball.velocity[1] = -ball.velocity[1]
     
-    # if ball touch top wall
+    # if ball touch top wall, increase score
     if ball.rect.y < 0:
+        score += 1
         ball.velocity[1] = -ball.velocity[1]
+
+    if pygame.sprite.collide_mask(ball, paddle):
+        ball.bounce()
 
     screen.fill((0, 0, 0))
 
     sprites_list.draw(screen)
+
+    # draw score text
+    font = pygame.font.Font(None, 74)
+    text = font.render(str(score), 1, WHITE)
+    screen.blit(text, (350, 10))
+
     pygame.display.flip()
     clock.tick(60)
 
